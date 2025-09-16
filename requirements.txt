@@ -3,3 +3,4 @@ numpy
 joblib
 pandas
 scikit-learn
+cloudpickle
