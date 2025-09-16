@@ -1,9 +1,12 @@
 import streamlit as st
-import joblib
+import cloudpickle
 
-# Load models
-binary_model = joblib.load("binary_model.pkl")
-multi_model = joblib.load("multi_model.pkl")
+with open("binary_model.pkl", "rb") as f:
+    binary_model = cloudpickle.load(f)
+
+with open("multi_model.pkl", "rb") as f:
+    multi_model = cloudpickle.load(f)
+
 
 st.title('🎈 Fake News Detector')
 st.info('This app uses ML models to classify news articles.')
