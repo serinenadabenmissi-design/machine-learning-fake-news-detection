@@ -3,14 +3,16 @@ import streamlit as st
 import cloudpickle
 import pandas as pd
 
+st.title("🎈 Fake News Detector")
+st.info("This app uses ML models to classify news articles.")
+
 with open("binary_model.pkl", "rb") as f:
     binary_model = cloudpickle.load(f)
 
 with open("multi_model.pkl", "rb") as f:
     multi_model = cloudpickle.load(f)
 
-st.title("🎈 Fake News Detector")
-st.info("This app uses ML models to classify news articles.")
+
 
 # User input
 title = st.text_input("Enter news title:")
