@@ -1,31 +1,28 @@
 
 import streamlit as st
-import cloudpickle
 import pandas as pd
+import cloudpickle
 
 # -------------------------------
 # App title and info
 # -------------------------------
 st.title("🎈 Fake News Detector")
-st.info("This app detects if a news article is fake or not, and classifies it if real.")
+st.info("Enter news details to classify if it's fake (bs) or real. If real, classify the type.")
 
 # -------------------------------
-# Load the trained ML models
+# Load trained pipelines
 # -------------------------------
-with open("binary_model.pkl", "rb") as f:
-    binary_model = cloudpickle.load(f)
-
-with open("multi_model.pkl", "rb") as f:
-    multi_model = cloudpickle.load(f)
-
-# -------------------------------
-# Define the columns expected by the model
-# Make sure these match the columns used during training
-# -------------------------------
-expected_cols = ["title", "text", "domain_rank", "country", "full_text"]
+try:
+    with open("pipeline_binary.pkl", "rb") as f:
+        pipeline_binary = cloudpickle.load(f)
+    with open("pipeline_multi.pkl", "rb") as f:
+        pipeline_multi = cloudpickle.load(f)
+except FileNotFoundError:
+    st.error("Pipeline files not found! Upload pipeline_binary.pkl and pipeline_multi.pkl in the same folder.")
+    st.stop()
 
 # -------------------------------
-# User inputs
+# User input
 # -------------------------------
 title = st.text_input("Enter news title:")
 text = st.text_area("Enter news text:")
@@ -33,49 +30,37 @@ domain_rank = st.number_input("Enter domain rank:", min_value=0, step=1)
 country = st.text_input("Enter country:")
 
 # -------------------------------
-# When the Predict button is clicked
+# Predict button
 # -------------------------------
 if st.button("Predict"):
-    # -------------------------------
-    # Create derived column full_text by combining title and text
-    # -------------------------------
-    full_text = f"{title} {text}"
-
-    # -------------------------------
-    # Create a DataFrame with all expected columns
-    # Text columns are strings, numeric columns are numeric
-    # -------------------------------
-    input_data = pd.DataFrame([{
-        "title": str(title or ""),
-        "text": str(text or ""),
-        "domain_rank": int(domain_rank),
-        "country": str(country or ""),
-        "full_text": str(full_text)
-    }])
-
-    # -------------------------------
-    # Show input DataFrame for debugging (optional)
-    # -------------------------------
-    st.write("Input DataFrame:", input_data)
-
-    # -------------------------------
-    # Step 1: Binary classifier (Fake or Not)
-    # -------------------------------
-    try:
-        binary_pred = binary_model.predict(input_data)[0]
-    except Exception as e:
-        st.error(f"Binary model error: {e}")
+    if not title or not text or not country:
+        st.warning("Please fill in all fields.")
     else:
-        if binary_pred == "bs":
-            st.error("⚠️ This looks like **BS News**")
+        # Prepare DataFrame for pipeline (must match training columns)
+        input_data = pd.DataFrame([{
+            "full_text": f"{title} {text}",
+            "domain_rank": int(domain_rank),
+            "country": str(country)
+        }])
+
+        # -------------------------------
+        # Step 1: Binary classification
+        # -------------------------------
+        try:
+            binary_pred = pipeline_binary.predict(input_data)[0]
+        except Exception as e:
+            st.error(f"Binary model error: {e}")
         else:
-            # -------------------------------
-            # Step 2: Multi-class classifier if not fake
-            # -------------------------------
-            try:
-                multi_pred = multi_model.predict(input_data)[0]
-            except Exception as e:
-                st.error(f"Multi-class model error: {e}")
+            if binary_pred == "bs":
+                st.error("⚠️ This looks like **BS News**")
             else:
-                st.success(f"✅ Classified as: {multi_pred}")
+                # -------------------------------
+                # Step 2: Multiclass prediction
+                # -------------------------------
+                try:
+                    multi_pred = pipeline_multi.predict(input_data)[0]
+                except Exception as e:
+                    st.error(f"Multiclass model error: {e}")
+                else:
+                    st.success(f"✅ Classified as: {multi_pred}")
 
