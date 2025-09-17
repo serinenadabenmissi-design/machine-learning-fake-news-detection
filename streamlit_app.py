@@ -10,13 +10,19 @@ st.title("🎈 Fake News Detector")
 st.info("This app detects if a news article is fake or not, and classifies it if real.")
 
 # -------------------------------
-# Load the trained ML pipelines
+# Load the trained ML models
 # -------------------------------
-with open("pipeline_binary.pkl", "rb") as f:
-    pipeline_binary = cloudpickle.load(f)
+with open("binary_model.pkl", "rb") as f:
+    binary_model = cloudpickle.load(f)
 
-with open("pipeline_multi.pkl", "rb") as f:
-    pipeline_multi = cloudpickle.load(f)
+with open("multi_model.pkl", "rb") as f:
+    multi_model = cloudpickle.load(f)
+
+# -------------------------------
+# Define the columns expected by the model
+# Make sure these match the columns used during training
+# -------------------------------
+expected_cols = ["title", "text", "domain_rank", "country", "full_text"]
 
 # -------------------------------
 # User inputs
@@ -27,24 +33,36 @@ domain_rank = st.number_input("Enter domain rank:", min_value=0, step=1)
 country = st.text_input("Enter country:")
 
 # -------------------------------
-# When Predict button is clicked
+# When the Predict button is clicked
 # -------------------------------
 if st.button("Predict"):
     # -------------------------------
-    # Prepare input DataFrame for pipeline
-    # Must match the columns used during training
+    # Create derived column full_text by combining title and text
+    # -------------------------------
+    full_text = f"{title} {text}"
+
+    # -------------------------------
+    # Create a DataFrame with all expected columns
+    # Text columns are strings, numeric columns are numeric
     # -------------------------------
     input_data = pd.DataFrame([{
-        "full_text": f"{title} {text}",
+        "title": str(title or ""),
+        "text": str(text or ""),
         "domain_rank": int(domain_rank),
-        "country": str(country or "")
+        "country": str(country or ""),
+        "full_text": str(full_text)
     }])
+
+    # -------------------------------
+    # Show input DataFrame for debugging (optional)
+    # -------------------------------
+    st.write("Input DataFrame:", input_data)
 
     # -------------------------------
     # Step 1: Binary classifier (Fake or Not)
     # -------------------------------
     try:
-        binary_pred = pipeline_binary.predict(input_data)[0]
+        binary_pred = binary_model.predict(input_data)[0]
     except Exception as e:
         st.error(f"Binary model error: {e}")
     else:
@@ -55,7 +73,7 @@ if st.button("Predict"):
             # Step 2: Multi-class classifier if not fake
             # -------------------------------
             try:
-                multi_pred = pipeline_multi.predict(input_data)[0]
+                multi_pred = multi_model.predict(input_data)[0]
             except Exception as e:
                 st.error(f"Multi-class model error: {e}")
             else:
