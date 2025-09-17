@@ -23,8 +23,7 @@ with open("multi_model.pkl", "rb") as f:
 # Adjust this list according to your training data
 # -------------------------------
 expected_cols = ["title", "text", "domain_rank", "country", "full_text"]  
-# 'full_text' is required by the model, combining title + text
-# Add more columns if your model was trained with them
+# Add other columns if your model needs them
 
 # -------------------------------
 # User inputs
@@ -41,15 +40,18 @@ if st.button("Predict"):
     # -------------------------------
     # Create derived columns if needed
     # -------------------------------
-    full_text = f"{title} {text}"  # combine title and text
+    full_text = f"{title} {text}"
 
     # -------------------------------
-    # Create a DataFrame with all expected columns
-    # Fill missing ones with empty string or 0
+    # Create DataFrame with all expected columns
+    # Ensure text columns are str, numeric columns are numeric
     # -------------------------------
     input_data = pd.DataFrame([{
-        col: locals().get(col, "")  # get variable if exists, else empty string
-        for col in expected_cols
+        "title": str(title or ""),
+        "text": str(text or ""),
+        "domain_rank": int(domain_rank),  # convert to numeric
+        "country": str(country or ""),
+        "full_text": str(full_text)
     }])
 
     # -------------------------------
@@ -77,4 +79,3 @@ if st.button("Predict"):
                 st.error(f"Multi-class model error: {e}")
             else:
                 st.success(f"✅ Classified as: {multi_pred}")
-
