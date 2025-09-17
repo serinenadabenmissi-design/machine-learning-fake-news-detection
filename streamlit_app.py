@@ -4,13 +4,13 @@ import cloudpickle
 import pandas as pd
 
 # -------------------------------
-# Streamlit app title and info
+# App title and info
 # -------------------------------
 st.title("🎈 Fake News Detector")
-st.info("This app uses ML models to classify news articles.")
+st.info("This app detects if a news article is fake or not, and classifies it if real.")
 
 # -------------------------------
-# Load the trained models
+# Load the trained ML models
 # -------------------------------
 with open("binary_model.pkl", "rb") as f:
     binary_model = cloudpickle.load(f)
@@ -19,11 +19,10 @@ with open("multi_model.pkl", "rb") as f:
     multi_model = cloudpickle.load(f)
 
 # -------------------------------
-# Define expected columns for the model
-# Adjust this list according to your training data
+# Define the columns expected by the model
+# Make sure these match the columns used during training
 # -------------------------------
-expected_cols = ["title", "text", "domain_rank", "country", "full_text"]  
-# Add other columns if your model needs them
+expected_cols = ["title", "text", "domain_rank", "country", "full_text"]
 
 # -------------------------------
 # User inputs
@@ -34,28 +33,28 @@ domain_rank = st.number_input("Enter domain rank:", min_value=0, step=1)
 country = st.text_input("Enter country:")
 
 # -------------------------------
-# When Predict button is clicked
+# When the Predict button is clicked
 # -------------------------------
 if st.button("Predict"):
     # -------------------------------
-    # Create derived columns if needed
+    # Create derived column full_text by combining title and text
     # -------------------------------
     full_text = f"{title} {text}"
 
     # -------------------------------
-    # Create DataFrame with all expected columns
-    # Ensure text columns are str, numeric columns are numeric
+    # Create a DataFrame with all expected columns
+    # Text columns are strings, numeric columns are numeric
     # -------------------------------
     input_data = pd.DataFrame([{
         "title": str(title or ""),
         "text": str(text or ""),
-        "domain_rank": int(domain_rank),  # convert to numeric
+        "domain_rank": int(domain_rank),
         "country": str(country or ""),
         "full_text": str(full_text)
     }])
 
     # -------------------------------
-    # Show input DataFrame for debugging
+    # Show input DataFrame for debugging (optional)
     # -------------------------------
     st.write("Input DataFrame:", input_data)
 
@@ -71,7 +70,7 @@ if st.button("Predict"):
             st.error("⚠️ This looks like **BS News**")
         else:
             # -------------------------------
-            # Step 2: Multi-class classifier (if not fake)
+            # Step 2: Multi-class classifier if not fake
             # -------------------------------
             try:
                 multi_pred = multi_model.predict(input_data)[0]
