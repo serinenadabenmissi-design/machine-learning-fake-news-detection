@@ -21,8 +21,10 @@ with open("multi_model.pkl", "rb") as f:
 # User inputs
 title = st.text_input("Enter news title:")
 text = st.text_area("Enter news text:")
-domain_rank = st.number_input("Enter domain rank:", min_value=0, step=1)
-country = st.text_input("Enter country:")
+domain_rank = st.number_input("Enter domain rank:", min_value=2000, step=1)
+
+country_list = ["unknown","AU", "US", "UK", "FR", "DE", "IN", "CA","BG","CH","CO","DE","GB","EE","ES","EU","IN","IO","IR","IS","LI","ME","NL","RU","SE","SG","TV","ZA"]
+country = st.selectbox("Select country:", country_list)
 
 if st.button("Predict"):
     if not title or not text or not country:
