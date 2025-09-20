@@ -21,7 +21,9 @@ with open("multi_model.pkl", "rb") as f:
 # User inputs
 title = st.text_input("Enter news title:")
 text = st.text_area("Enter news text:")
-domain_rank = st.number_input("Enter domain rank:", min_value=2000, step=1)
+
+domain_rank = st.slider("Select domain rank:", 486, 96853, 3000)
+
 
 country_list = ["unknown","AU", "US", "UK", "FR", "DE", "IN", "CA","BG","CH","CO","DE","GB","EE","ES","EU","IN","IO","IR","IS","LI","ME","NL","RU","SE","SG","TV","ZA"]
 country = st.selectbox("Select country:", country_list)
