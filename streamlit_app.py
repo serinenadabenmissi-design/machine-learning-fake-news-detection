@@ -22,7 +22,7 @@ with open("multi_model.pkl", "rb") as f:
 title = st.text_input("Enter news title:")
 text = st.text_area("Enter news text:")
 
-domain_rank = st.slider("Select domain rank:", 486, 96853, 3000)
+domain_rank = st.slider("Select domain rank:", 486, 96853, 45000)
 
 
 country_list = ["unknown","AU", "US", "UK", "FR", "DE", "IN", "CA","BG","CH","CO","DE","GB","EE","ES","EU","IN","IO","IR","IS","LI","ME","NL","RU","SE","SG","TV","ZA"]
