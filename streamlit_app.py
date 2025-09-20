@@ -50,7 +50,7 @@ if st.button("Predict"):
             st.error(f"Binary model error: {e}")
         else:
             if binary_pred == "bs":
-                st.error("⚠️ This looks like **BS News**")
+                st.error("✅ This looks like **BS News**")
             else:
                 # Multiclass prediction
                 try:
@@ -58,5 +58,5 @@ if st.button("Predict"):
                 except Exception as e:
                     st.error(f"Multi-class model error: {e}")
                 else:
-                    st.success(f"✅ Classified as: {multi_pred}")
+                    st.success(f"⚠️ Classified as: {multi_pred}")
 
