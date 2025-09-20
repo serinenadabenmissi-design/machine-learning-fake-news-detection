@@ -2,8 +2,8 @@ import streamlit as st
 import cloudpickle
 import pandas as pd
 
-st.title("🎈 Fake News Detector")
-st.info("This app detects if a news article is fake or not, and classifies it if real.")
+st.title("🤖 Fake News Detector")
+st.info("🧠 This app detects if a news article is fake or not, and classifies it if real.")
 
 # Load the preprocessor, normalizer, and models
 with open("preprocessor.pkl", "rb") as f:
