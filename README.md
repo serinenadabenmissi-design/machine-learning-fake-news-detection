@@ -14,7 +14,7 @@
 ### 🤖 Model Training & Results
 ![Results] (https://raw.githubusercontent.com/serinenadabenmissi-design/machine-learning-fake-news-detection/main/screenshots/fake%20news.png))
 ### 📊 Classification Output
-![Classification](https://raw.githubusercontent.com/serinenadabenmissi-design/machine-learning-fake-news-detection/main/screenshots/fake%20news%20detection.png)
+![Classification] (https://raw.githubusercontent.com/serinenadabenmissi-design/machine-learning-fake-news-detection/master/screenshots/fake%20news%20detection.png)
 
 ---
 
