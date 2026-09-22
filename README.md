@@ -7,6 +7,14 @@
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
+## 🖼️ Screenshots
+
+### 🤖 Model Training & Results
+![Training results](screenshots/fake-news.png)
+
+### 📊 Confusion Matrix & Per-Class Performance
+![Confusion matrix](screenshots/confusion-matrix.png)
+
 ## Overview
 
 This project classifies news articles into 8 categories (`bs`, `bias`, `conspiracy`, `fake`, `hate`, `junksci`, `satire`, `state`) using a **two-stage Random Forest pipeline**:
