@@ -26,10 +26,10 @@
 ## 🖼️ Screenshots
 
 ### 🤖 Model Training & Results
-![Training results](screenshots/fake-news.png)
+![Results](https://raw.githubusercontent.com/serinenadabenmissi-design/machine-learning-fake-news-detection/master/screenshots/fake%20news.png)
 
-### 📊 Confusion Matrix & Per-Class Performance
-![Confusion matrix](screenshots/confusion-matrix.png) <!-- TODO: add a per-class classification report heatmap here — this is what hiring managers look for first -->
+### 📊 Classification Output
+![Classification](https://raw.githubusercontent.com/serinenadabenmissi-design/machine-learning-fake-news-detection/master/screenshots/fake%20news%20detection.png)
 
 ---
 
